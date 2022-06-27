@@ -1,21 +1,19 @@
-import { async } from "@firebase/util";
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { fetchDataWhere } from "./firestore.js";
 import app from "./connect.js"
 
 const auth = getAuth(app);
 
-const stateChanged = (req, res) => {
-    onAuthStateChanged(auth, (user) => {
-        return res.send(user)
-    })
+const getauth = async (req, res) => {
+    const user = auth.currentUser;
+    const userData = await fetchDataWhere("users", "Email", "==", user.email);
+    return res.send({"user": user, "data": userData})
 }
 
-const signin = (req, res) => {
-    signInWithEmailAndPassword(auth, req.body.email, req.body.password)
+const signin = async (req, res) => {
+    await signInWithEmailAndPassword(auth, req.body.email, req.body.password)
     .then(() => {
-        onAuthStateChanged(auth, (user) => {
-            return res.send(user)
-        })
+        getauth(req, res)
     })
     .catch((error) => {
         const errorCode = error.code;
@@ -27,6 +25,7 @@ const signin = (req, res) => {
 
 const signout = async (req, res) => {
     await signOut(auth)
+    res.send(true)
 }
 
-export { auth, signin, stateChanged, signout }
+export { auth, signin, getauth, signout }

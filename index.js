@@ -1,5 +1,5 @@
 import { fetchData } from "./firestore.js";
-import { signin, signout, stateChanged } from "./auth.js";
+import { signin, signout, getauth } from "./auth.js";
 import express from 'express'
 import dotenv from "dotenv"
 import cors from "cors"
@@ -9,7 +9,7 @@ const app = express()
 const port = process.env.PORT
 
 app.use(cors({
-    origin: 'http://localhost:3001',
+    origin: 'http://localhost:3000',
     optionsSuccessStatus: 200
 }))
 app.use(express.json())
@@ -26,12 +26,12 @@ app.get('/fetch/:collection', async (req, res) => {
 
 app.post('/login', async (req, res) => {
     console.log("LOGIN")
-    signin(req, res)
+    await signin(req, res)
 })
 
 app.post('/auth', async (req, res) => {
     console.log("AUTH")
-    stateChanged(req, res)
+    await getauth(req, res)
 })
 
 app.post('/logout', async (req, res) => {
