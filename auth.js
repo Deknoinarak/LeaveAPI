@@ -1,4 +1,4 @@
-import { getAuth, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword  } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { fetchDataWhere } from "./firestore.js";
 import app from "./connect.js"
 
@@ -49,10 +49,18 @@ const create = async (req, res) => {
 }
 
 const edit = async (req, res) => {
-    const email = req.body.email
-    const password = req.body.password
+    if (!auth.currentUser) {
+        res.status(500).send({"code": "not-auth", "message": "Not login yet"})
+        return;
+    }
 
-    createUserWithEmailAndPassword(auth, email, password)
+    const editData = {
+
+    }
+
+    if (req.body.displayName) editData["displayName"] = req.body.displayName
+
+    updateProfile(auth.currentUser, editData)
     .then((userCredential) => {
         const user = userCredential.user;
         res.send(user)

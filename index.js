@@ -1,5 +1,5 @@
 import { fetchData } from "./firestore.js";
-import { signin, signout, getauth, create } from "./auth.js";
+import { signin, signout, getauth, create, edit } from "./auth.js";
 import express from 'express'
 import dotenv from "dotenv"
 import cors from "cors"
@@ -46,7 +46,7 @@ app.post('/create', async (req, res) => {
 
 app.post('/edit', async (req, res) => {
     console.log("EDIT")
-    await create(req, res)
+    await edit(req, res)
 })
 
 app.listen(port, () => {
