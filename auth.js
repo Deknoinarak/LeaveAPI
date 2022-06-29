@@ -8,7 +8,7 @@ const getauth = async (req, res) => {
     const user = auth.currentUser;
     if (user) {
         const userData = await fetchDataWhere("users", "Email", "==", user.email);
-        return res.send({"user": user, "data": userData})
+        return res.send({"user": user, "data": userData[0]})
     }
     return res.send({"user": user})
 }
