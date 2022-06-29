@@ -1,5 +1,5 @@
 import { fetchData } from "./firestore.js";
-import { signin, signout, getauth } from "./auth.js";
+import { signin, signout, getauth, create } from "./auth.js";
 import express from 'express'
 import dotenv from "dotenv"
 import cors from "cors"
@@ -37,6 +37,16 @@ app.post('/auth', async (req, res) => {
 app.post('/logout', async (req, res) => {
     console.log("LOGOUT")
     signout(req, res)
+})
+
+app.post('/create', async (req, res) => {
+    console.log("CREATE")
+    await create(req, res)
+})
+
+app.post('/edit', async (req, res) => {
+    console.log("EDIT")
+    await create(req, res)
 })
 
 app.listen(port, () => {
