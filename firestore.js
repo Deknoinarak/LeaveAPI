@@ -1,4 +1,4 @@
-import { getFirestore, collection, getDocs, query, where } from 'firebase/firestore/lite';
+import { getFirestore, collection, getDocs, query, where, doc, getDoc } from 'firebase/firestore/lite';
 import app from "./connect.js"
 
 const db = getFirestore(app);
@@ -17,4 +17,11 @@ async function fetchDataWhere(e, x, z, y) {
     return collectionList;
 }
 
-export { db, fetchData, fetchDataWhere }
+async function fetchDataDoc(e, d) {
+    const collectionCol = doc(db, e, d);
+    const collectionSnapshot = await getDoc(collectionCol);
+    const collectionList = collectionSnapshot.data();
+    return collectionList;
+}
+
+export { db, fetchData, fetchDataWhere, fetchDataDoc }

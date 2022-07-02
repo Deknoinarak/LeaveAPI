@@ -1,4 +1,5 @@
-import { fetchData } from "./firestore.js";
+import { fetchData, fetchDataDoc } from "./firestore.js";
+import { getFiles } from "./storage.js";
 import { signin, signout, getauth, create, edit } from "./auth.js";
 import express from 'express'
 import dotenv from "dotenv"
@@ -24,6 +25,11 @@ app.get('/fetch/:collection', async (req, res) => {
     res.send(await fetchData(req.params.collection))
 })
 
+app.get('/fetch/:collection/:doc', async (req, res) => {
+    console.log("FETCH")
+    res.send(await fetchDataDoc(req.params.collection, req.params.doc))
+})
+
 app.post('/login', async (req, res) => {
     console.log("LOGIN")
     await signin(req, res)
@@ -47,6 +53,11 @@ app.post('/create', async (req, res) => {
 app.post('/edit', async (req, res) => {
     console.log("EDIT")
     await edit(req, res)
+})
+
+app.get('/getfile/:file', async (req, res) => {
+    console.log("FILES")
+    getFiles(req, res)
 })
 
 app.listen(port, () => {
